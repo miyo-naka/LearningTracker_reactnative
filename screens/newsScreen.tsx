@@ -30,11 +30,21 @@ export default function NewsScreen({ navigation }: any) {
     setNews(response.data.articles);
   };
 
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const publishDate = year + "/" + month + "/" + day;
+  const formatDate = (iso: string) => {
+    const date = new Date(iso);
+    return `${date.getFullYear()}/${
+      date.getMonth() + 1
+    }/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  // const date = new Date();
+  // const year = date.getFullYear();
+  // const month = date.getMonth() + 1;
+  // const day = date.getDate();
+  // const publishDate = year + "/" + month + "/" + day;
 
   return (
     <FlatList
@@ -51,8 +61,7 @@ export default function NewsScreen({ navigation }: any) {
               {item.title}
             </Text>
             <Text style={styles.newsSubText}>
-              {item.publishedAt}
-              {publishDate}
+              {formatDate(item.publishedAt)}
             </Text>
           </View>
           <Image
@@ -70,10 +79,16 @@ const styles = StyleSheet.create({
   newsContainer: {
     flexDirection: "row",
     backgroundColor: "#fff0f5",
-    padding: 8,
-    borderColor: "gray",
-    borderStyle: "dotted",
-    borderWidth: 0.5,
+    padding: 12,
+    borderRadius: 12,
+    marginTop: 4,
+    marginBottom: 4,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
   },
   newsText: {
     flex: 1,
@@ -83,9 +98,13 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   newsSubText: {
-    fontSize: 10,
+    fontSize: 12,
   },
   newsImage: {
-    borderRadius: 10,
+    width: 80,
+    height: 80,
+    borderRadius: 8,
+    marginRight: 4,
+    backgroundColor: "#ccc",
   },
 });

@@ -4,7 +4,8 @@ type ContentCardProps = {
   title: string;
   description: string;
   onPress?: () => void;
-  emoji: string;
+  // emoji: string;
+  icon: React.ReactNode;
   color: string;
   disabled?: boolean;
 };
@@ -13,7 +14,7 @@ export default function ContentsCard({
   title,
   description,
   onPress,
-  emoji,
+  icon,
   color,
   disabled = false,
 }: ContentCardProps) {
@@ -22,7 +23,7 @@ export default function ContentsCard({
       onPress={disabled ? undefined : onPress}
       style={[styles.contentCard, { backgroundColor: color }]}
     >
-      <Text style={styles.emoji}>{emoji}</Text>
+      <Text style={styles.emoji}>{icon}</Text>
       <Text style={styles.title}>{title}</Text>
       <Text style={styles.desc}>{description}</Text>
     </Pressable>
@@ -31,13 +32,17 @@ export default function ContentsCard({
 
 const styles = StyleSheet.create({
   contentCard: {
-    width: "40%",
-    padding: 16,
-    margin: 16,
     alignItems: "center",
     justifyContent: "center",
-    borderRadius: 12,
-    marginBottom: 12,
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 16,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 4,
+    marginBottom: 8,
   },
   emoji: {
     fontSize: 32,
