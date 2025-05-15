@@ -31,7 +31,7 @@ export default function ContentsCard({
 
 const styles = StyleSheet.create({
   contentCard: {
-    flex: 1,
+    width: "40%",
     padding: 16,
     margin: 16,
     alignItems: "center",
