@@ -16,6 +16,7 @@
     "axios": "^1.9.0",
     "expo": "~53.0.9",
     "expo-constants": "~17.1.6",
+    "expo-sqlite": "~15.2.10",
     "expo-status-bar": "~2.2.3",
     "nativewind": "^4.1.23",
     "react": "19.0.0",
@@ -24,9 +25,9 @@
     "react-native-dotenv": "^3.4.11",
     "react-native-safe-area-context": "5.4.0",
     "react-native-screens": "~4.10.0",
+    "react-native-vector-icons": "^10.2.0",
     "react-native-web": "^0.20.0",
-    "react-native-webview": "13.13.5",
-    "expo-sqlite": "~15.2.10"
+    "react-native-webview": "13.13.5"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

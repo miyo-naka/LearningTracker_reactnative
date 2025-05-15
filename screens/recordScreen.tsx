@@ -19,9 +19,9 @@ export default function RecordScreen() {
   const handleStartRecord = async () => {
     const startTime = new Date().toISOString();
     try {
-      const id = await startStudySession(startTime);
+      await startStudySession(startTime);
       setIsSessionActive(true);
-      Alert.alert("セッション開始", `ID: ${id}`);
+      Alert.alert("セッション開始");
     } catch (error) {
       console.error("開始エラー:", error);
       Alert.alert("エラー", "セッションの開始に失敗しました");
@@ -31,9 +31,9 @@ export default function RecordScreen() {
   const handleFinishRecord = async () => {
     const endTime = new Date().toISOString();
     try {
-      const id = await finishStudySession(endTime);
+      await finishStudySession(endTime);
       setIsSessionActive(false);
-      Alert.alert("セッション終了", `ID: ${id}`);
+      Alert.alert("セッション終了");
     } catch (error) {
       console.error("終了エラー:", error);
       Alert.alert("エラー", "セッションの終了に失敗しました");
@@ -41,44 +41,91 @@ export default function RecordScreen() {
   };
 
   return (
-    <View style={styles.recordContainer}>
-      <Text>学習内容を記録</Text>
-      <TouchableOpacity
-        style={[styles.button, isSessionActive && styles.buttonDisabled]}
-        onPress={handleStartRecord}
-        disabled={isSessionActive}
-      >
-        <Text style={styles.buttonText}>開始</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={[styles.button, !isSessionActive && styles.buttonDisabled]}
-        onPress={handleFinishRecord}
-        disabled={!isSessionActive}
-      >
-        <Text style={styles.buttonText}>終了</Text>
-      </TouchableOpacity>
+    <View style={styles.container}>
+      <Text style={styles.title}>学習セッション</Text>
+
+      <View style={styles.card}>
+        <Text style={styles.cardText}>
+          {isSessionActive
+            ? "セッション中です"
+            : "まだセッションは開始されていません"}
+        </Text>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            isSessionActive ? styles.buttonDisabled : styles.buttonStart,
+          ]}
+          onPress={handleStartRecord}
+          disabled={isSessionActive}
+        >
+          <Text style={styles.buttonText}>開始</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={[
+            styles.button,
+            !isSessionActive ? styles.buttonDisabled : styles.buttonEnd,
+          ]}
+          onPress={handleFinishRecord}
+          disabled={!isSessionActive}
+        >
+          <Text style={styles.buttonText}>終了</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  recordContainer: {
-    alignItems: "center",
-    justifyContent: "center",
-    textAlign: "center",
+  container: {
     flex: 1,
+    padding: 24,
+    backgroundColor: "#f0f4f8",
+    justifyContent: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 24,
+    textAlign: "center",
+    color: "#333",
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 16,
+    padding: 24,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+    shadowOffset: { width: 0, height: 3 },
+    elevation: 4,
+    alignItems: "center",
+  },
+  cardText: {
+    fontSize: 16,
+    marginBottom: 16,
+    color: "#555",
   },
   button: {
-    backgroundColor: "#fff0f5",
-    padding: 20,
-    margin: 20,
-    borderColor: "gray",
-    borderStyle: "dotted",
-    borderWidth: 0.5,
-    borderRadius: 5,
+    width: "80%",
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginTop: 12,
+    alignItems: "center",
+  },
+  buttonStart: {
+    backgroundColor: "#4caf50", // 緑
+  },
+  buttonEnd: {
+    backgroundColor: "#4caf50", // 赤
   },
   buttonDisabled: {
     backgroundColor: "#ccc",
   },
-  buttonText: { fontSize: 14 },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
 });

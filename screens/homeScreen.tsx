@@ -1,5 +1,6 @@
 import { ScrollView, StyleSheet, Text, View } from "react-native";
 import ContentsCard from "../component/contentsCard";
+import { Feather } from "@expo/vector-icons";
 
 export default function HomeScreen({ navigation }: any) {
   return (
@@ -14,28 +15,28 @@ export default function HomeScreen({ navigation }: any) {
           title="Create Record"
           description="今日の学習内容を記録しましょう"
           onPress={() => navigation.navigate("Record")}
-          emoji="✍️"
+          icon={<Feather name="edit-3" size={28} color="#333" />}
           color="#FDF1E6"
         />
         <ContentsCard
           title="View History"
           description="過去の記録を確認・編集"
           onPress={() => navigation.navigate("History")}
-          emoji="🔍"
+          icon={<Feather name="clock" size={28} color="#333" />}
           color="#EEF7FF"
         />
-        <ContentsCard
+        {/* <ContentsCard
           title="My Page"
           description="ユーザー情報を確認"
           onPress={() => navigation.navigate("Home")}
           emoji="👤"
           color="#E7E8EA"
-        />
+        /> */}
         <ContentsCard
           title="News"
           description="最近のニュース"
           onPress={() => navigation.navigate("News")}
-          emoji="📖"
+          icon={<Feather name="book-open" size={28} color="#333" />}
           color="#E0F6E0"
         />
       </View>
@@ -61,8 +62,6 @@ const styles = StyleSheet.create({
   },
 
   contentCardContainer: {
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: "center",
+    gap: 16,
   },
 });
