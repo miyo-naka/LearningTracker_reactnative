@@ -13,14 +13,14 @@ export default function HomeScreen({ navigation }: any) {
         <ContentsCard
           title="Create Record"
           description="今日の学習内容を記録しましょう"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("Record")}
           emoji="✍️"
           color="#FDF1E6"
         />
         <ContentsCard
           title="View History"
           description="過去の記録を確認・編集"
-          onPress={() => navigation.navigate("Home")}
+          onPress={() => navigation.navigate("History")}
           emoji="🔍"
           color="#EEF7FF"
         />

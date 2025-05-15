@@ -30,11 +30,21 @@ export default function NewsScreen({ navigation }: any) {
     setNews(response.data.articles);
   };
 
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  const publishDate = year + "/" + month + "/" + day;
+  const formatDate = (iso: string) => {
+    const date = new Date(iso);
+    return `${date.getFullYear()}/${
+      date.getMonth() + 1
+    }/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(
+      2,
+      "0"
+    )}`;
+  };
+
+  // const date = new Date();
+  // const year = date.getFullYear();
+  // const month = date.getMonth() + 1;
+  // const day = date.getDate();
+  // const publishDate = year + "/" + month + "/" + day;
 
   return (
     <FlatList
@@ -51,8 +61,7 @@ export default function NewsScreen({ navigation }: any) {
               {item.title}
             </Text>
             <Text style={styles.newsSubText}>
-              {item.publishedAt}
-              {publishDate}
+              {formatDate(item.publishedAt)}
             </Text>
           </View>
           <Image
