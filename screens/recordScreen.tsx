@@ -1,25 +1,37 @@
 import { useEffect, useState } from "react";
-import { Button, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Button,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import {
   startStudySession,
   initDatabase,
   finishStudySession,
 } from "../services/database";
 import { Alert } from "react-native";
+import { Picker } from "@react-native-picker/picker";
 
 export default function RecordScreen() {
+  const [isDbReady, setIsDbReady] = useState(false);
   const [isSessionActive, setIsSessionActive] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("Programming");
+  const [content, setContent] = useState("");
 
   useEffect(() => {
     (async () => {
       await initDatabase();
+      setIsDbReady(true);
     })();
   }, []);
 
   const handleStartRecord = async () => {
     const startTime = new Date().toISOString();
     try {
-      await startStudySession(startTime);
+      await startStudySession(startTime, selectedCategory, content);
       setIsSessionActive(true);
       Alert.alert("セッション開始");
     } catch (error) {
@@ -40,7 +52,11 @@ export default function RecordScreen() {
     }
   };
 
-  return (
+  return !isDbReady ? (
+    <View style={styles.container}>
+      <Text>データベース初期化中...</Text>
+    </View>
+  ) : (
     <View style={styles.container}>
       <Text style={styles.title}>学習セッション</Text>
 
@@ -50,6 +66,28 @@ export default function RecordScreen() {
             ? "セッション中です"
             : "まだセッションは開始されていません"}
         </Text>
+        <View style={styles.formContainer}>
+          <Text style={styles.label}>カテゴリー</Text>
+          <View style={styles.pickerContainer}>
+            <Picker
+              selectedValue={selectedCategory}
+              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+            >
+              <Picker.Item label="Programming" value="Programming" />
+              <Picker.Item label="Data Analytics" value="Data Analytics" />
+              <Picker.Item label="English" value="English" />
+              <Picker.Item label="Other" value="Other" />
+            </Picker>
+          </View>
+          <Text style={styles.label}>メモ（任意）</Text>
+          <TextInput
+            style={styles.input}
+            value={content}
+            onChangeText={setContent}
+            placeholder="例: Next.jsのAPIルーティングを学習"
+            multiline
+          />
+        </View>
 
         <TouchableOpacity
           style={[
@@ -127,5 +165,28 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
     fontWeight: "bold",
+  },
+
+  formContainer: {
+    marginVertical: 16,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "bold",
+    marginBottom: 4,
+  },
+  pickerContainer: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    marginBottom: 12,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    padding: 8,
+    minHeight: 60,
+    textAlignVertical: "top",
   },
 });

@@ -64,6 +64,10 @@ export default function HistoryScreen() {
           <Text style={styles.duration}>
             🕒 {calculateDuration(item.start_time, item.end_time)}
           </Text>
+          <Text style={styles.cardCategory}>カテゴリ: {item.category}</Text>
+          {item.content ? (
+            <Text style={styles.cardContent}>メモ: {item.content}</Text>
+          ) : null}
         </View>
       )}
     />
@@ -95,5 +99,16 @@ const styles = StyleSheet.create({
   duration: {
     fontSize: 14,
     color: "#666",
+  },
+  cardCategory: {
+    fontSize: 12,
+    color: "#555",
+    marginTop: 4,
+  },
+  cardContent: {
+    fontSize: 12,
+    color: "#333",
+    marginTop: 2,
+    fontStyle: "italic",
   },
 });

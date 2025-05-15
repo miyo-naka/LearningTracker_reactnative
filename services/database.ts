@@ -11,7 +11,9 @@ export async function initDatabase() {
       CREATE TABLE IF NOT EXISTS study_sessions (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         start_time TEXT NOT NULL,
-        end_time TEXT
+        end_time TEXT,
+        category TEXT NOT NULL,
+        content TEXT
       );
     `);
   }
@@ -26,14 +28,21 @@ async function getDb(): Promise<SQLite.SQLiteDatabase> {
 }
 
 // 学習開始
-export async function startStudySession(start: string) {
+export async function startStudySession(
+  start: string,
+  category: string,
+  content?: string
+) {
   const db = await getDb();
   const result = await db.runAsync(
-    "INSERT INTO study_sessions (start_time) VALUES (?)",
-    start
+    "INSERT INTO study_sessions (start_time, category, content) VALUES (?,?,?)",
+    start,
+    category,
+    content || null
   );
   return result.lastInsertRowId;
 }
+
 // 学習終了
 export async function finishStudySession(end: string) {
   const db = await getDb();
@@ -59,8 +68,8 @@ export async function finishStudySession(end: string) {
 // 学習記録を取得
 export async function getAllStudySessions() {
   const db = await getDb();
-  const rows = await db.getAllAsync(
+  const result = await db.getAllAsync(
     "SELECT * FROM study_sessions ORDER BY start_time DESC"
   );
-  return rows;
+  return result;
 }
