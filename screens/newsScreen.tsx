@@ -30,6 +30,7 @@ export default function NewsScreen({ navigation }: any) {
 
   return (
     <FlatList
+      style={styles.container}
       data={news.slice(0, 5)}
       renderItem={({ item }) => (
         <TouchableOpacity
@@ -58,6 +59,9 @@ export default function NewsScreen({ navigation }: any) {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   newsContainer: {
     flexDirection: "row",
     backgroundColor: "#fff0f5",

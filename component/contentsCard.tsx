@@ -34,7 +34,6 @@ const styles = StyleSheet.create({
   contentCard: {
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#fff",
     borderRadius: 16,
     padding: 16,
     shadowColor: "#000",

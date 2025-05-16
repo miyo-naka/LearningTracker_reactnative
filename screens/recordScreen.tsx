@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -11,6 +12,7 @@ import {
   startStudySession,
   initDatabase,
   finishStudySession,
+  isStudySessionActive,
 } from "../services/database";
 import { Alert } from "react-native";
 import CategoryPicker from "../component/categoryPicker";
@@ -25,6 +27,10 @@ export default function RecordScreen() {
     (async () => {
       await initDatabase();
       setIsDbReady(true);
+    })();
+    (async () => {
+      const active = await isStudySessionActive();
+      setIsSessionActive(active);
     })();
   }, []);
 
@@ -57,7 +63,10 @@ export default function RecordScreen() {
       <Text>データベース初期化中...</Text>
     </View>
   ) : (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Text style={styles.title}>学習セッション</Text>
 
       <View style={styles.card}>
@@ -67,7 +76,7 @@ export default function RecordScreen() {
             : "まだセッションは開始されていません"}
         </Text>
 
-        <KeyboardAvoidingView style={styles.formContainer}>
+        <View style={styles.formContainer}>
           <CategoryPicker
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
@@ -103,9 +112,9 @@ export default function RecordScreen() {
           >
             <Text style={styles.buttonText}>終了</Text>
           </TouchableOpacity>
-        </KeyboardAvoidingView>
+        </View>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 

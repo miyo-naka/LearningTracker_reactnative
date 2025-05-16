@@ -73,3 +73,12 @@ export async function getAllStudySessions() {
   );
   return result;
 }
+
+// 学習状態を取得
+export async function isStudySessionActive() {
+  const db = await getDb();
+  const result = await db.getAllAsync(
+    `SELECT * FROM study_sessions WHERE end_time IS NULL LIMIT 1`
+  );
+  return result.length > 0;
+}
