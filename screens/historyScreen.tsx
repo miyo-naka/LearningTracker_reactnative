@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { getAllStudySessions, initDatabase } from "../services/database";
+import formatDateTime from "../services/formatDateTime";
+import calculateDuration from "../services/calculateDuration";
 
 export default function HistoryScreen() {
   const [records, setRecords] = useState<any[]>([]);
@@ -8,50 +10,10 @@ export default function HistoryScreen() {
   useEffect(() => {
     (async () => {
       await initDatabase();
-    })();
-  }, []);
-
-  useEffect(() => {
-    (async () => {
       const sessions = await getAllStudySessions();
       setRecords(sessions);
     })();
   }, []);
-
-  // 学習時間（分単位）を計算
-  function calculateDuration(start: string, end: string | null): string {
-    if (!end) return "-";
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diffMs = endDate.getTime() - startDate.getTime();
-    const diffMinutes = Math.floor(diffMs / 60000);
-
-    const hours = Math.floor(diffMinutes / 60);
-    const minutes = diffMinutes % 60;
-    return `${hours}h ${minutes}m`;
-  }
-
-  // 日付フォーマット（例: 2025/05/13 14:00）
-  function formatDateTime(datetime: string | null): string {
-    if (!datetime) return "-";
-    const date = new Date(datetime);
-    return `${date.getFullYear()}/${
-      date.getMonth() + 1
-    }/${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
-  }
-
-  // const formatDate = (iso: string) => {
-  //   const date = new Date(iso);
-  //   return `${date.getFullYear()}/${
-  //     date.getMonth() + 1
-  //   }/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(
-  //     2,
-  //     "0"
-  //   )}`;
-  // };
 
   return (
     <FlatList

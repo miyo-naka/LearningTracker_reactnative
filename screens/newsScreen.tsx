@@ -7,8 +7,8 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import Constants from "expo-constants";
-import axios from "axios";
+import formatDateTime from "../services/formatDateTime";
+import getNews from "../services/news";
 
 type Article = {
   title: string;
@@ -19,32 +19,14 @@ type Article = {
 
 export default function NewsScreen({ navigation }: any) {
   const [news, setNews] = useState<Article[]>([]);
-  const apiKey = Constants.expoConfig?.extra?.NEWS_API_KEY;
-  const URI = `https://newsapi.org/v2/top-headlines?sources=techcrunch&apiKey=${apiKey}`;
 
   useEffect(() => {
-    getNews();
+    const fetchNews = async () => {
+      const response = await getNews();
+      setNews(response.data.articles);
+    };
+    fetchNews();
   }, []);
-  const getNews = async () => {
-    const response = await axios.get(URI);
-    setNews(response.data.articles);
-  };
-
-  const formatDate = (iso: string) => {
-    const date = new Date(iso);
-    return `${date.getFullYear()}/${
-      date.getMonth() + 1
-    }/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(
-      2,
-      "0"
-    )}`;
-  };
-
-  // const date = new Date();
-  // const year = date.getFullYear();
-  // const month = date.getMonth() + 1;
-  // const day = date.getDate();
-  // const publishDate = year + "/" + month + "/" + day;
 
   return (
     <FlatList
@@ -61,7 +43,7 @@ export default function NewsScreen({ navigation }: any) {
               {item.title}
             </Text>
             <Text style={styles.newsSubText}>
-              {formatDate(item.publishedAt)}
+              {formatDateTime(item.publishedAt)}
             </Text>
           </View>
           <Image
@@ -81,8 +63,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff0f5",
     padding: 12,
     borderRadius: 12,
-    marginTop: 4,
-    marginBottom: 4,
+    margin: 8,
     alignItems: "center",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
