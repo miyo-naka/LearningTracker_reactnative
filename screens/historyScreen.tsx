@@ -1,57 +1,26 @@
 import { useEffect, useState } from "react";
 import { FlatList, StyleSheet, Text, View } from "react-native";
 import { getAllStudySessions, initDatabase } from "../services/database";
+import formatDateTime from "../services/formatDateTime";
+import calculateDuration from "../services/calculateDuration";
 
 export default function HistoryScreen() {
   const [records, setRecords] = useState<any[]>([]);
 
-  useEffect(() => {
-    (async () => {
-      await initDatabase();
-    })();
-  }, []);
+  const categoryColors: any = {
+    Programming: "#3498db",
+    English: "#27ae60",
+    "Data Analytics": "#e67e22",
+    Other: "#9b59b6",
+  };
 
   useEffect(() => {
     (async () => {
+      await initDatabase();
       const sessions = await getAllStudySessions();
       setRecords(sessions);
     })();
   }, []);
-
-  // 学習時間（分単位）を計算
-  function calculateDuration(start: string, end: string | null): string {
-    if (!end) return "-";
-    const startDate = new Date(start);
-    const endDate = new Date(end);
-    const diffMs = endDate.getTime() - startDate.getTime();
-    const diffMinutes = Math.floor(diffMs / 60000);
-
-    const hours = Math.floor(diffMinutes / 60);
-    const minutes = diffMinutes % 60;
-    return `${hours}h ${minutes}m`;
-  }
-
-  // 日付フォーマット（例: 2025/05/13 14:00）
-  function formatDateTime(datetime: string | null): string {
-    if (!datetime) return "-";
-    const date = new Date(datetime);
-    return `${date.getFullYear()}/${
-      date.getMonth() + 1
-    }/${date.getDate()} ${date.getHours().toString().padStart(2, "0")}:${date
-      .getMinutes()
-      .toString()
-      .padStart(2, "0")}`;
-  }
-
-  // const formatDate = (iso: string) => {
-  //   const date = new Date(iso);
-  //   return `${date.getFullYear()}/${
-  //     date.getMonth() + 1
-  //   }/${date.getDate()} ${date.getHours()}:${String(date.getMinutes()).padStart(
-  //     2,
-  //     "0"
-  //   )}`;
-  // };
 
   return (
     <FlatList
@@ -61,12 +30,23 @@ export default function HistoryScreen() {
       renderItem={({ item }) => (
         <View style={styles.card}>
           <Text style={styles.date}>{formatDateTime(item.start_time)}</Text>
-          <Text style={styles.duration}>
-            🕒 {calculateDuration(item.start_time, item.end_time)}
-          </Text>
-          <Text style={styles.cardCategory}>カテゴリ: {item.category}</Text>
+          <View style={styles.row}>
+            <Text
+              style={[
+                styles.category,
+                { color: categoryColors[item.category] },
+              ]}
+            >
+              {item.category}
+            </Text>
+            <Text style={styles.duration}>
+              🕒 {calculateDuration(item.start_time, item.end_time)}
+            </Text>
+          </View>
           {item.content ? (
-            <Text style={styles.cardContent}>メモ: {item.content}</Text>
+            <View style={styles.memoBox}>
+              <Text style={styles.cardContent}> {item.content}</Text>
+            </View>
           ) : null}
         </View>
       )}
@@ -77,10 +57,10 @@ export default function HistoryScreen() {
 const styles = StyleSheet.create({
   historyContainer: {
     padding: 16,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f0f4f8",
   },
   card: {
-    backgroundColor: "#fff",
+    backgroundColor: "#ffffff",
     borderRadius: 12,
     padding: 16,
     marginBottom: 12,
@@ -91,24 +71,34 @@ const styles = StyleSheet.create({
     elevation: 3,
   },
   date: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#333",
+    fontSize: 14,
+    fontWeight: "500",
+    color: "#1a1a1a",
     marginBottom: 6,
+  },
+  row: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 6,
+  },
+  category: {
+    fontSize: 14,
+    fontWeight: "500",
   },
   duration: {
     fontSize: 14,
     color: "#666",
   },
-  cardCategory: {
-    fontSize: 12,
-    color: "#555",
-    marginTop: 4,
+  memoBox: {
+    backgroundColor: "#f7f9fc",
+    borderRadius: 8,
+    padding: 8,
+    marginTop: 8,
   },
   cardContent: {
-    fontSize: 12,
-    color: "#333",
-    marginTop: 2,
+    fontSize: 13,
+    color: "#444",
     fontStyle: "italic",
   },
 });

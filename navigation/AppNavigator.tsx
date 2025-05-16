@@ -1,9 +1,9 @@
-import { createStackNavigator } from "@react-navigation/stack";
-import HomeScreen from "./screens/homeScreen";
-import NewsScreen from "./screens/newsScreen";
-import NewsDetailScreen from "./screens/newsDetailScreen";
-import HistoryScreen from "./screens/historyScreen";
-import RecordScreen from "./screens/recordScreen";
+import HomeScreen from "../screens/homeScreen";
+import NewsScreen from "../screens/newsScreen";
+import NewsDetailScreen from "../screens/newsDetailScreen";
+import HistoryScreen from "../screens/historyScreen";
+import RecordScreen from "../screens/recordScreen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export type navigationRouteName = {
   HomeScreen: undefined;
@@ -11,7 +11,7 @@ export type navigationRouteName = {
   NewsDetailScreen: undefined;
 };
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function AppNavigator() {
   return (

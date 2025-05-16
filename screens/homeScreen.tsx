@@ -1,10 +1,10 @@
-import { ScrollView, StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 import ContentsCard from "../component/contentsCard";
 import { Feather } from "@expo/vector-icons";
 
 export default function HomeScreen({ navigation }: any) {
   return (
-    <ScrollView>
+    <View style={styles.container}>
       <View style={styles.headLine}>
         <Text style={styles.headLineTitle}>Learning Tracker</Text>
         <Text>学びを記録して、成長を見える化しよう</Text>
@@ -20,48 +20,43 @@ export default function HomeScreen({ navigation }: any) {
         />
         <ContentsCard
           title="View History"
-          description="過去の記録を確認・編集"
+          description="過去の記録を確認"
           onPress={() => navigation.navigate("History")}
           icon={<Feather name="clock" size={28} color="#333" />}
           color="#EEF7FF"
         />
-        {/* <ContentsCard
-          title="My Page"
-          description="ユーザー情報を確認"
-          onPress={() => navigation.navigate("Home")}
-          emoji="👤"
-          color="#E7E8EA"
-        /> */}
         <ContentsCard
           title="News"
-          description="最近のニュース"
+          description="最新のニュース"
           onPress={() => navigation.navigate("News")}
           icon={<Feather name="book-open" size={28} color="#333" />}
           color="#E0F6E0"
         />
       </View>
-    </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingTop: 24,
+  },
   headLine: {
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
-    flex: 1,
     marginTop: 16,
     marginBottom: 16,
   },
-
   headLineTitle: {
-    flex: 1,
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 8,
   },
-
   contentCardContainer: {
-    gap: 16,
+    gap: 8,
+    margin: 12,
+    paddingHorizontal: 16,
   },
 });

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import {
-  Button,
+  KeyboardAvoidingView,
+  Platform,
   StyleSheet,
   Text,
   TextInput,
@@ -11,9 +12,10 @@ import {
   startStudySession,
   initDatabase,
   finishStudySession,
+  isStudySessionActive,
 } from "../services/database";
 import { Alert } from "react-native";
-import { Picker } from "@react-native-picker/picker";
+import CategoryPicker from "../component/categoryPicker";
 
 export default function RecordScreen() {
   const [isDbReady, setIsDbReady] = useState(false);
@@ -25,6 +27,10 @@ export default function RecordScreen() {
     (async () => {
       await initDatabase();
       setIsDbReady(true);
+    })();
+    (async () => {
+      const active = await isStudySessionActive();
+      setIsSessionActive(active);
     })();
   }, []);
 
@@ -57,7 +63,10 @@ export default function RecordScreen() {
       <Text>データベース初期化中...</Text>
     </View>
   ) : (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={styles.container}
+    >
       <Text style={styles.title}>学習セッション</Text>
 
       <View style={styles.card}>
@@ -66,19 +75,13 @@ export default function RecordScreen() {
             ? "セッション中です"
             : "まだセッションは開始されていません"}
         </Text>
+
         <View style={styles.formContainer}>
-          <Text style={styles.label}>カテゴリー</Text>
-          <View style={styles.pickerContainer}>
-            <Picker
-              selectedValue={selectedCategory}
-              onValueChange={(itemValue) => setSelectedCategory(itemValue)}
-            >
-              <Picker.Item label="Programming" value="Programming" />
-              <Picker.Item label="Data Analytics" value="Data Analytics" />
-              <Picker.Item label="English" value="English" />
-              <Picker.Item label="Other" value="Other" />
-            </Picker>
-          </View>
+          <CategoryPicker
+            selectedCategory={selectedCategory}
+            setSelectedCategory={setSelectedCategory}
+          />
+
           <Text style={styles.label}>メモ（任意）</Text>
           <TextInput
             style={styles.input}
@@ -87,31 +90,31 @@ export default function RecordScreen() {
             placeholder="例: Next.jsのAPIルーティングを学習"
             multiline
           />
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              isSessionActive ? styles.buttonDisabled : styles.buttonStart,
+            ]}
+            onPress={handleStartRecord}
+            disabled={isSessionActive}
+          >
+            <Text style={styles.buttonText}>開始</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={[
+              styles.button,
+              !isSessionActive ? styles.buttonDisabled : styles.buttonEnd,
+            ]}
+            onPress={handleFinishRecord}
+            disabled={!isSessionActive}
+          >
+            <Text style={styles.buttonText}>終了</Text>
+          </TouchableOpacity>
         </View>
-
-        <TouchableOpacity
-          style={[
-            styles.button,
-            isSessionActive ? styles.buttonDisabled : styles.buttonStart,
-          ]}
-          onPress={handleStartRecord}
-          disabled={isSessionActive}
-        >
-          <Text style={styles.buttonText}>開始</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={[
-            styles.button,
-            !isSessionActive ? styles.buttonDisabled : styles.buttonEnd,
-          ]}
-          onPress={handleFinishRecord}
-          disabled={!isSessionActive}
-        >
-          <Text style={styles.buttonText}>終了</Text>
-        </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 }
 
@@ -145,41 +148,15 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     color: "#555",
   },
-  button: {
-    width: "80%",
-    paddingVertical: 12,
-    borderRadius: 10,
-    marginTop: 12,
-    alignItems: "center",
-  },
-  buttonStart: {
-    backgroundColor: "#4caf50", // 緑
-  },
-  buttonEnd: {
-    backgroundColor: "#4caf50", // 赤
-  },
-  buttonDisabled: {
-    backgroundColor: "#ccc",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
 
   formContainer: {
     marginVertical: 16,
+    width: "80%",
   },
   label: {
     fontSize: 16,
     fontWeight: "bold",
     marginBottom: 4,
-  },
-  pickerContainer: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    borderRadius: 8,
-    marginBottom: 12,
   },
   input: {
     borderWidth: 1,
@@ -188,5 +165,26 @@ const styles = StyleSheet.create({
     padding: 8,
     minHeight: 60,
     textAlignVertical: "top",
+  },
+
+  button: {
+    paddingVertical: 12,
+    borderRadius: 10,
+    marginTop: 12,
+    alignItems: "center",
+  },
+  buttonStart: {
+    backgroundColor: "#4caf50",
+  },
+  buttonEnd: {
+    backgroundColor: "#4caf50",
+  },
+  buttonDisabled: {
+    backgroundColor: "#ccc",
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
