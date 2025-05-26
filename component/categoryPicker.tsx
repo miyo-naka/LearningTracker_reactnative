@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from "react-native";
 import { Picker } from "@react-native-picker/picker";
+import { categories } from "../constants/categories";
 
 type category = {
   selectedCategory: string;
@@ -18,10 +19,9 @@ export default function CategoryPicker({
           selectedValue={selectedCategory}
           onValueChange={(itemValue) => setSelectedCategory(itemValue)}
         >
-          <Picker.Item label="Programming" value="Programming" />
-          <Picker.Item label="Data Analytics" value="Data Analytics" />
-          <Picker.Item label="English" value="English" />
-          <Picker.Item label="Other" value="Other" />
+          {categories.map((category) => (
+            <Picker.Item key={category} label={category} value={category} />
+          ))}
         </Picker>
       </View>
     </View>
