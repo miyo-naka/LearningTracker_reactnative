@@ -1,6 +1,5 @@
-import { Text, View, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
 import WebView from "react-native-webview";
-import Constants from "expo-constants";
 
 export default function NewsDetailScreen(props: any) {
   const { route } = props;
