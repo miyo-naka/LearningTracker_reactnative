@@ -1,6 +1,5 @@
 import { categories } from "../constants/categories";
-import { StudySession } from "./database";
-
+import { StudySession } from "../types/StudySession";
 type CategoryTotal = {
   category: string;
   totalMinutes: number;

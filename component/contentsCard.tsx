@@ -4,7 +4,6 @@ type ContentCardProps = {
   title: string;
   description: string;
   onPress?: () => void;
-  // emoji: string;
   icon: React.ReactNode;
   color: string;
   disabled?: boolean;

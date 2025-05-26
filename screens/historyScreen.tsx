@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   FlatList,
   StyleSheet,
@@ -10,6 +10,7 @@ import { getAllStudySessions, initDatabase } from "../services/database";
 import formatDateTime from "../services/formatDateTime";
 import calculateDuration from "../services/calculateDuration";
 import { categoryColors } from "../constants/colors";
+import { useFocusEffect } from "@react-navigation/native";
 
 export default function HistoryScreen({ navigation }: any) {
   const [records, setRecords] = useState<any[]>([]);
@@ -21,6 +22,17 @@ export default function HistoryScreen({ navigation }: any) {
       setRecords(sessions);
     })();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSessions = async () => {
+        await initDatabase();
+        const sessions = await getAllStudySessions();
+        setRecords(sessions);
+      };
+      fetchSessions();
+    }, [])
+  );
 
   return (
     <FlatList

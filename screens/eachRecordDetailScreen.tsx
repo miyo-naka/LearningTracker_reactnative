@@ -1,13 +1,10 @@
-// RecordDetailScreen.tsx
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { RouteProp, useRoute } from "@react-navigation/native";
 import { useState } from "react";
-import {
-  updateStudySession,
-  deleteStudySession,
-  StudySession,
-} from "../services/database";
+import { updateStudySession, deleteStudySession } from "../services/database";
 import { Alert } from "react-native";
+import { StudySession } from "../types/StudySession";
+import DateTimeInput from "../component/dateTimeImput";
 
 type RootStackParamList = {
   RecordDetail: { item: StudySession };
@@ -52,6 +49,7 @@ export default function RecordDetailScreen({ navigation }: any) {
       { cancelable: true }
     );
   };
+
   return (
     <View style={{ padding: 20 }}>
       <Text style={styles.label}>カテゴリー</Text>
@@ -67,29 +65,16 @@ export default function RecordDetailScreen({ navigation }: any) {
         onChangeText={setContent}
         style={styles.input}
       />
-      <Text style={styles.label}>開始</Text>
-      <TextInput style={styles.input}>
-        {new Date(startTime).toLocaleString(undefined, {
-          year: "numeric",
-          month: "2-digit",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        })}
-      </TextInput>
 
-      <Text style={styles.label}>終了</Text>
-      <TextInput style={styles.input}>
-        {endTime
-          ? new Date(endTime).toLocaleString(undefined, {
-              year: "numeric",
-              month: "2-digit",
-              day: "2-digit",
-              hour: "2-digit",
-              minute: "2-digit",
-            })
-          : "未終了"}
-      </TextInput>
+      <Text style={styles.label}>開始日時</Text>
+      <DateTimeInput dateTimeValue={startTime} onChange={setStartTime} />
+
+      <Text style={styles.label}>終了日時</Text>
+      <DateTimeInput
+        dateTimeValue={endTime ?? new Date().toISOString()}
+        onChange={setEndTime}
+      />
+
       <View style={styles.buttonGroup}>
         <Button title="保存" onPress={handleUpdate} />
         <View style={{ width: 20 }} />
