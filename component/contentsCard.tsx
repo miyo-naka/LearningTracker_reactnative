@@ -32,26 +32,26 @@ export default function ContentsCard({
 
 const styles = StyleSheet.create({
   contentCard: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 16,
-    padding: 16,
+    padding: 10,
     shadowColor: "#000",
     shadowOpacity: 0.1,
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,
     elevation: 3,
-    marginBottom: 8,
   },
   emoji: {
-    fontSize: 32,
+    fontSize: 20,
   },
   title: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "bold",
   },
   desc: {
-    fontSize: 14,
+    fontSize: 11,
     color: "#666",
   },
 });

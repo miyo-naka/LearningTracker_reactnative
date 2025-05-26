@@ -3,6 +3,7 @@ import NewsScreen from "../screens/newsScreen";
 import NewsDetailScreen from "../screens/newsDetailScreen";
 import HistoryScreen from "../screens/historyScreen";
 import RecordScreen from "../screens/recordScreen";
+import RecordDetailScreen from "../screens/eachRecordDetailScreen";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 
 export type navigationRouteName = {
@@ -19,6 +20,7 @@ export default function AppNavigator() {
       <Stack.Screen name="Home" component={HomeScreen} />
       <Stack.Screen name="Record" component={RecordScreen} />
       <Stack.Screen name="History" component={HistoryScreen} />
+      <Stack.Screen name="RecordDetail" component={RecordDetailScreen} />
       <Stack.Screen name="News" component={NewsScreen} />
       <Stack.Screen name="NewsDetail" component={NewsDetailScreen} />
     </Stack.Navigator>

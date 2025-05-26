@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { FlatList, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { getAllStudySessions, initDatabase } from "../services/database";
 import formatDateTime from "../services/formatDateTime";
 import calculateDuration from "../services/calculateDuration";
+import { categoryColors } from "../constants/colors";
 
-export default function HistoryScreen() {
+export default function HistoryScreen({ navigation }: any) {
   const [records, setRecords] = useState<any[]>([]);
-
-  const categoryColors: any = {
-    Programming: "#3498db",
-    English: "#27ae60",
-    "Data Analytics": "#e67e22",
-    Other: "#9b59b6",
-  };
 
   useEffect(() => {
     (async () => {
@@ -29,25 +29,29 @@ export default function HistoryScreen() {
       keyExtractor={(item) => item.id.toString()}
       renderItem={({ item }) => (
         <View style={styles.card}>
-          <Text style={styles.date}>{formatDateTime(item.start_time)}</Text>
-          <View style={styles.row}>
-            <Text
-              style={[
-                styles.category,
-                { color: categoryColors[item.category] },
-              ]}
-            >
-              {item.category}
-            </Text>
-            <Text style={styles.duration}>
-              🕒 {calculateDuration(item.start_time, item.end_time)}
-            </Text>
-          </View>
-          {item.content ? (
-            <View style={styles.memoBox}>
-              <Text style={styles.cardContent}> {item.content}</Text>
+          <TouchableOpacity
+            onPress={() => navigation.navigate("RecordDetail", { item })}
+          >
+            <Text style={styles.date}>{formatDateTime(item.start_time)}</Text>
+            <View style={styles.row}>
+              <Text
+                style={[
+                  styles.category,
+                  { color: categoryColors[item.category] },
+                ]}
+              >
+                {item.category}
+              </Text>
+              <Text style={styles.duration}>
+                🕒 {calculateDuration(item.start_time, item.end_time)}
+              </Text>
             </View>
-          ) : null}
+            {item.content ? (
+              <View style={styles.memoBox}>
+                <Text style={styles.cardContent}> {item.content}</Text>
+              </View>
+            ) : null}
+          </TouchableOpacity>
         </View>
       )}
     />
