@@ -62,7 +62,7 @@ export default function DashboardBarChart({
           }}
           maxValue={getAdjustedMaxValue(data)}
           noOfSections={5}
-          isAnimated
+          isAnimated={false}
         />
       </View>
     </View>
