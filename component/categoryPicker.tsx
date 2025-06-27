@@ -18,6 +18,7 @@ export default function CategoryPicker({
         <Picker
           selectedValue={selectedCategory}
           onValueChange={(itemValue) => setSelectedCategory(itemValue)}
+          style={styles.picker}
         >
           {categories.map((category) => (
             <Picker.Item key={category} label={category} value={category} />
@@ -39,5 +40,8 @@ const styles = StyleSheet.create({
     borderColor: "#ccc",
     borderRadius: 8,
     marginBottom: 12,
+  },
+  picker: {
+    color: "black",
   },
 });
