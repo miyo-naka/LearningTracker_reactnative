@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "StudyRecord_native",
-    "slug": "StudyRecord_native",
+    "name": "Learning Tracker",
+    "slug": "learning-tracker",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -24,6 +24,7 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "owner": "miyo-naka"
   }
 }
